@@ -3,12 +3,37 @@
  */
 package AoC;
 
+import io.reactivex.rxjava3.core.Flowable;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.BaseStream;
+
 public class App {
     public String getGreeting() {
         return "Hello world.";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        final var app = new App();
+        final var lines = app.readLines();
+        final var allInts = lines.map(Integer::parseInt);
+        
+        final var product = allInts.flatMap(anInt -> pair(anInt, allInts))
+                .filter(pair -> 2020 == pair.getFirst() + pair.getSecond())
+                .map(pair -> pair.getFirst() * pair.getSecond())
+                .firstElement()
+                .subscribe(System.out::println);
+    }
+
+    private static Flowable<Pair<Integer, Integer>> pair(Integer anInt, Flowable<Integer> lines) {
+        return lines.map(otherInt -> Pair.of(anInt, otherInt));
+    }
+
+    private Flowable<String> readLines() {
+        return Flowable.using(
+                () -> Files.lines(Path.of("src/main/resources/input.txt")),
+                Flowable::fromStream,
+                BaseStream::close);
     }
 }
