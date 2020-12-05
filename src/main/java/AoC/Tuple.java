@@ -4,20 +4,20 @@ import com.google.common.base.Preconditions;
 
 import java.util.Objects;
 
-public class Pair<A, B> {
+public class Tuple<A, B> {
 
     private final A first;
     private final B second;
 
-    private Pair(A first, B second) {
+    private Tuple(A first, B second) {
         this.first = first;
         this.second = second;
     }
 
-    public static <A, B> Pair<A, B> of(A first, B second) {
+    public static <A, B> Tuple<A, B> of(A first, B second) {
         Preconditions.checkNotNull(first);
         Preconditions.checkNotNull(second);
-        return new Pair<>(first, second);
+        return new Tuple<>(first, second);
     }
 
     public A getFirst() {
@@ -32,9 +32,9 @@ public class Pair<A, B> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Pair<?, ?> pair = (Pair<?, ?>) o;
-        return Objects.equals(first, pair.first) &&
-                Objects.equals(second, pair.second);
+        Tuple<?, ?> tuple = (Tuple<?, ?>) o;
+        return Objects.equals(first, tuple.first) &&
+                Objects.equals(second, tuple.second);
     }
 
     @Override
