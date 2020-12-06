@@ -1,4 +1,4 @@
-package AoC;
+package AoC.util;
 
 import com.google.common.base.Preconditions;
 

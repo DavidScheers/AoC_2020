@@ -3,6 +3,7 @@
  */
 package AoC;
 
+import AoC.day1.Day1;
 import io.reactivex.rxjava3.core.Flowable;
 
 import java.nio.file.Files;
@@ -18,31 +19,9 @@ public class App {
         final var allInts = readLines()
                 .map(Integer::parseInt);
 
-        final var product = allInts.flatMap(anInt -> pair(anInt, allInts))
-                .filter(tuple -> 2020 == sum(tuple))
-                .map(App::multiply)
-                .firstElement()
-                .subscribe(System.out::println);
+        final var day1 = new Day1();
+        day1.run(allInts);
 
-        final var puduct3 = allInts.flatMap(anInt -> tupled3(anInt, allInts))
-                .filter(tuple3 -> 2020 == sum(tuple3))
-                .map(App::multiply)
-                .firstElement()
-                .subscribe(System.out::println);
-
-    }
-
-    private static Flowable<Tuple<Integer, Integer>> pair(Integer anInt, Flowable<Integer> lines) {
-        return lines.map(otherInt -> Tuple.of(anInt, otherInt));
-    }
-
-    private static Flowable<Tuple3<Integer, Integer, Integer>> tupled3(Integer anInt, Flowable<Integer> others) {
-        return others.flatMap(other -> tupled3_(anInt, other, others));
-    }
-
-    private static Flowable<Tuple3<Integer, Integer, Integer>> tupled3_(Integer anInt, Integer other,
-                                                                        Flowable<Integer> others) {
-        return others.map(third -> Tuple3.of(anInt, other, third));
     }
 
     private static Flowable<String> readLines() {
@@ -52,19 +31,4 @@ public class App {
                 BaseStream::close);
     }
 
-    private static Integer sum(Tuple<Integer, Integer> intTuple) {
-        return intTuple.getFirst() + intTuple.getSecond();
-    }
-
-    private static Integer sum(Tuple3<Integer, Integer, Integer> intTuple) {
-        return intTuple.getFirst() + intTuple.getSecond() + intTuple.getThird();
-    }
-
-    private static Integer multiply(Tuple<Integer, Integer> intTuple) {
-        return intTuple.getFirst() * intTuple.getSecond();
-    }
-
-    private static Integer multiply(Tuple3<Integer, Integer, Integer> intTuple) {
-        return intTuple.getFirst() * intTuple.getSecond() * intTuple.getThird();
-    }
 }
