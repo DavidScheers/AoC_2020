@@ -4,6 +4,7 @@
 package AoC;
 
 import AoC.day1.Day1;
+import AoC.day2.Day2;
 import io.reactivex.rxjava3.core.Flowable;
 
 import java.nio.file.Files;
@@ -16,20 +17,38 @@ public class App {
     }
 
     public static void main(String[] args) {
-        final var allInts = readLines()
+        runDay1();
+        runDay2();
+    }
+
+    private static void runDay1() {
+        final var allInts = readDay1Input()
                 .map(Integer::parseInt);
 
         final var day1 = new Day1();
         final var firstResult = day1.run1(allInts).subscribe(System.out::println);
         final var secondResult = day1.run2(allInts).subscribe(System.out::println);
-
     }
 
-    private static Flowable<String> readLines() {
+    private static void runDay2() {
+        final var allInputs = readDay2Input();
+        final var day2 = new Day2();
+        final var firstResult = day2.run1(allInputs).subscribe(System.out::println);
+    }
+
+    private static Flowable<String> readDay1Input() {
         return Flowable.using(
                 () -> Files.lines(Path.of("src/main/resources/input.txt")),
                 Flowable::fromStream,
                 BaseStream::close);
     }
+
+    private static Flowable<String> readDay2Input() {
+        return Flowable.using(
+                () -> Files.lines(Path.of("src/main/resources/input2.txt")),
+                Flowable::fromStream,
+                BaseStream::close);
+    }
+
 
 }

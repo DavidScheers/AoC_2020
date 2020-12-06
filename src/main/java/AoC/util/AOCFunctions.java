@@ -1,6 +1,9 @@
 package AoC.util;
 
+import AoC.day2.Day2;
 import io.reactivex.rxjava3.core.Flowable;
+
+import java.util.function.BiFunction;
 
 public class AOCFunctions {
 
