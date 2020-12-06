@@ -1,16 +1,25 @@
 package AoC.day2;
 
+import AoC.util.AOCFunctions;
 import AoC.util.Tuple;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public final class Day2 {
 
     public Single<Long> run1(Flowable<String> inputs) {
         return inputs.map(this::parse)
-                .map(PasswordPolicy::isValid)
+                .map(passwordPolicy -> passwordPolicy.isValid(AOCFunctions.policy1()))
+                .filter(Optional::isPresent)
+                .count();
+    }
+
+    public Single<Long> run2(Flowable<String> inputs) {
+        return inputs.map(this::parse)
+                .map(passwordPolicy -> passwordPolicy.isValid(AOCFunctions.policy2()))
                 .filter(Optional::isPresent)
                 .count();
     }
@@ -37,11 +46,22 @@ public final class Day2 {
             this.password = password;
         }
 
-        public Optional<Password> isValid() {
-            final var count = password.chars().filter(value -> value == character).count();
-            return count >= bounds.getFirst() && count <= bounds.getSecond()
+        public Optional<Password> isValid(Predicate<PasswordPolicy> policy) {
+            return policy.test(this)
                     ? Optional.of(new Password(password))
                     : Optional.empty();
+        }
+
+        public Tuple<Integer, Integer> getBounds() {
+            return bounds;
+        }
+
+        public char getCharacter() {
+            return character;
+        }
+
+        public String getPassword() {
+            return password;
         }
     }
 

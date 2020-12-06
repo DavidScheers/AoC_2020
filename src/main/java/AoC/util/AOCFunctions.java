@@ -4,6 +4,7 @@ import AoC.day2.Day2;
 import io.reactivex.rxjava3.core.Flowable;
 
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 public class AOCFunctions {
 
@@ -34,5 +35,24 @@ public class AOCFunctions {
 
     public static Integer multiply(Tuple3<Integer, Integer, Integer> intTuple) {
         return intTuple.getFirst() * intTuple.getSecond() * intTuple.getThird();
+    }
+
+    public static Predicate<Day2.PasswordPolicy> policy1() {
+        return passwordPolicy -> {
+            final var count = passwordPolicy.getPassword().chars()
+                    .filter(value -> value == passwordPolicy.getCharacter())
+                    .count();
+            return count >= passwordPolicy.getBounds().getFirst() && count <= passwordPolicy.getBounds().getSecond();
+        };
+    }
+
+    public static Predicate<Day2.PasswordPolicy> policy2() {
+        return passwordPolicy -> {
+            final var password = passwordPolicy.getPassword();
+            final var firstChar = password.charAt(passwordPolicy.getBounds().getFirst() + 1);
+            final var secondChar = password.charAt(passwordPolicy.getBounds().getSecond() + 1);
+            return (passwordPolicy.getCharacter() == firstChar && passwordPolicy.getCharacter() != secondChar)
+                    || (passwordPolicy.getCharacter() != firstChar && passwordPolicy.getCharacter() == secondChar);
+        };
     }
 }

@@ -34,6 +34,7 @@ public class App {
         final var allInputs = readDay2Input();
         final var day2 = new Day2();
         final var firstResult = day2.run1(allInputs).subscribe(System.out::println);
+        final var secondResult = day2.run2(allInputs).subscribe(System.out::println);
     }
 
     private static Flowable<String> readDay1Input() {
