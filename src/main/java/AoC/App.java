@@ -20,7 +20,8 @@ public class App {
                 .map(Integer::parseInt);
 
         final var day1 = new Day1();
-        day1.run(allInts);
+        final var firstResult = day1.run1(allInts).subscribe(System.out::println);
+        final var secondResult = day1.run2(allInts).subscribe(System.out::println);
 
     }
 
