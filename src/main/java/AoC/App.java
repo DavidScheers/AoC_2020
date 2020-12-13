@@ -5,6 +5,7 @@ package AoC;
 
 import AoC.day1.Day1;
 import AoC.day2.Day2;
+import AoC.day4.Day4;
 import io.reactivex.rxjava3.core.Flowable;
 
 import java.nio.file.Files;
@@ -19,10 +20,11 @@ public class App {
     public static void main(String[] args) {
         runDay1();
         runDay2();
+        runDay4();
     }
 
     private static void runDay1() {
-        final var allInts = readDay1Input()
+        final var allInts = readInput(Path.of("src/main/resources/input.txt"))
                 .map(Integer::parseInt);
 
         final var day1 = new Day1();
@@ -31,22 +33,21 @@ public class App {
     }
 
     private static void runDay2() {
-        final var allInputs = readDay2Input();
+        final var allInputs = readInput(Path.of("src/main/resources/input2.txt"));
         final var day2 = new Day2();
         final var firstResult = day2.run1(allInputs).subscribe(System.out::println);
         final var secondResult = day2.run2(allInputs).subscribe(System.out::println);
     }
 
-    private static Flowable<String> readDay1Input() {
-        return Flowable.using(
-                () -> Files.lines(Path.of("src/main/resources/input.txt")),
-                Flowable::fromStream,
-                BaseStream::close);
+    private static void runDay4() {
+        final var allLines = readInput(Path.of("src/main/resources/input4.txt"));
+        final var day4 = new Day4();
+        final var firstResult = day4.run1(allLines).subscribe(System.out::println);
     }
 
-    private static Flowable<String> readDay2Input() {
+    private static Flowable<String> readInput(Path path) {
         return Flowable.using(
-                () -> Files.lines(Path.of("src/main/resources/input2.txt")),
+                () -> Files.lines(path),
                 Flowable::fromStream,
                 BaseStream::close);
     }
