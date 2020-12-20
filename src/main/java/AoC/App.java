@@ -18,8 +18,8 @@ public class App {
     }
 
     public static void main(String[] args) {
-        runDay1();
-        runDay2();
+//        runDay1();
+//        runDay2();
         runDay4();
     }
 
@@ -43,6 +43,7 @@ public class App {
         final var allLines = readInput(Path.of("src/main/resources/input4.txt"));
         final var day4 = new Day4();
         final var firstResult = day4.run1(allLines).subscribe(System.out::println);
+        final var secondResult = day4.run2(allLines).subscribe(System.out::println);
     }
 
     private static Flowable<String> readInput(Path path) {

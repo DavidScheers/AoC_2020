@@ -3,7 +3,8 @@ package AoC.util;
 import AoC.day2.Day2;
 import io.reactivex.rxjava3.core.Flowable;
 
-import java.util.function.BiFunction;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class AOCFunctions {
@@ -17,7 +18,7 @@ public class AOCFunctions {
     }
 
     public static Flowable<Tuple3<Integer, Integer, Integer>> tupled3_(Integer anInt, Integer other,
-                                                                 Flowable<Integer> others) {
+                                                                       Flowable<Integer> others) {
         return others.map(third -> Tuple3.of(anInt, other, third));
     }
 
@@ -54,5 +55,19 @@ public class AOCFunctions {
             return (passwordPolicy.getCharacter() == firstChar && passwordPolicy.getCharacter() != secondChar)
                     || (passwordPolicy.getCharacter() != firstChar && passwordPolicy.getCharacter() == secondChar);
         };
+    }
+
+    public static <A, B, C> Optional<C> map2(Optional<A> a, Optional<B> b, Function<A, Function<B, C>> f) {
+        return a.flatMap(ax -> b.map(bx -> f.apply(ax).apply(bx)));
+    }
+
+    public static <A, B, C, D, E, F, G, H, I> Optional<I> map10(Optional<A> a, Optional<B> b, Optional<C> c,
+                                                                Optional<D> d, Optional<E> e, Optional<F> f,
+                                                                Optional<G> g, Optional<H> h,
+                                                                Function<A, Function<B, Function<C, Function<D, Function<E, Function<F, Function<G, Function<H, Optional<I>>>>>>>>> func) {
+        return a.flatMap(ax ->
+                b.flatMap(bx -> c.flatMap(cx -> d.flatMap(dx -> e.flatMap(ex -> f.flatMap(fx -> g.flatMap(gx ->
+                        h.flatMap(hx -> func.apply(ax).apply(bx).apply(cx).apply(dx).apply(ex).apply(fx).apply(gx)
+                                .apply(hx)))))))));
     }
 }

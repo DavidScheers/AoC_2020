@@ -1,21 +1,23 @@
 package AoC.day4;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
-public class Passport {
+public final class Passport {
 
-    private final String birthYear;
-    private final String issueYear;
-    private final String expirationYear;
-    private final String height;
-    private final String hairColor;
-    private final String eyeColor;
-    private final String passportID;
+    private final Year birthYear;
+    private final Year issueYear;
+    private final Year expirationYear;
+    private final Height height;
+    private final HairColor hairColor;
+    private final EyeColor eyeColor;
+    private final PassportId passportID;
     private final String countryID;
 
-    Passport(String birthYear, String issueYear, String expirationYear, String height, String hairColor, String eyeColor, String passportID, String countryID) {
+    private Passport(Year birthYear, Year issueYear, Year expirationYear, Height height, HairColor hairColor,
+                     EyeColor eyeColor, PassportId passportID, String countryID) {
         this.birthYear = birthYear;
         this.issueYear = issueYear;
         this.expirationYear = expirationYear;
@@ -26,46 +28,66 @@ public class Passport {
         this.countryID = countryID;
     }
 
-    public static Optional<Passport> build(String birthYear, String issueYear, String expirationYear, String height,
-                                           String hairColor, String eyeColor, String passportID, String countryID) {
+    public static Optional<Passport> build(Year birthYear, Year issueYear, Year expirationYear, Height height,
+                                           HairColor hairColor, EyeColor eyeColor, PassportId passportID,
+                                           String countryID) {
         if (isNull(birthYear) || isNull(issueYear) || isNull(expirationYear) || isNull(height) || isNull(hairColor)
                 || isNull(eyeColor) || isNull(passportID)) {
             return Optional.empty();
         } else {
-            return Optional.of(new Passport(birthYear, issueYear, expirationYear, height, hairColor, eyeColor,
+            final var passport = Optional.of(new Passport(birthYear, issueYear, expirationYear, height, hairColor, eyeColor,
                     passportID, countryID));
+            return passport.filter(p -> p.getBirthYear().greaterThan(new Year(1919)) && p.getBirthYear().smallerThan(new Year(2003)))
+                    .filter(p -> p.getExpirationYear().greaterThan(new Year(2019)) && p.getExpirationYear().smallerThan(new Year(2031)))
+                    .filter(p -> p.getIssueYear().greaterThan(new Year(2009)) && p.getIssueYear().smallerThan(new Year(2021)));
         }
     }
 
-    public String getBirthYear() {
+    public Year getBirthYear() {
         return birthYear;
     }
 
-    public String getIssueYear() {
+    public Year getIssueYear() {
         return issueYear;
     }
 
-    public String getExpirationYear() {
+    public Year getExpirationYear() {
         return expirationYear;
     }
 
-    public String getHeight() {
+    public Height getHeight() {
         return height;
     }
 
-    public String getHairColor() {
+    public HairColor getHairColor() {
         return hairColor;
     }
 
-    public String getEyeColor() {
+    public EyeColor getEyeColor() {
         return eyeColor;
     }
 
-    public String getPassportID() {
+    public PassportId getPassportID() {
         return passportID;
     }
 
-    public Optional<String> getCountryID() {
-        return Optional.ofNullable(countryID);
+    public String getCountryID() {
+        return countryID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Passport passport = (Passport) o;
+        return Objects.equals(birthYear, passport.birthYear) && Objects.equals(issueYear, passport.issueYear)
+                && Objects.equals(expirationYear, passport.expirationYear) && Objects.equals(height, passport.height)
+                && Objects.equals(hairColor, passport.hairColor) && eyeColor == passport.eyeColor
+                && Objects.equals(passportID, passport.passportID) && Objects.equals(countryID, passport.countryID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(birthYear, issueYear, expirationYear, height, hairColor, eyeColor, passportID, countryID);
     }
 }

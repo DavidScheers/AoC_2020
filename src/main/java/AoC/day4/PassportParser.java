@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Objects.isNull;
+import static AoC.day4.Passport_.build;
+import static AoC.util.AOCFunctions.map10;
 
 public class PassportParser {
 
@@ -14,23 +15,30 @@ public class PassportParser {
 
     private static final Map<String, String> mutableMap = new HashMap<>();
 
-    static Optional<Passport> build(String birthYear, String issueYear, String expirationYear, String height,
-                                    String hairColor, String eyeColor, String passportID, String countryID) {
-        if (isNull(birthYear) || isNull(issueYear) || isNull(expirationYear) || isNull(height) || isNull(hairColor)
-                || isNull(eyeColor) || isNull(passportID)) {
-            return Optional.empty();
-        } else {
-            return Optional.of(new Passport(birthYear, issueYear, expirationYear, height, hairColor, eyeColor,
-                    passportID, countryID));
-        }
-    }
-
-    public static Optional<Passport> parse(List<String> input) {
+    public static Optional<Passport_> parse(List<String> input) {
         mutableMap.clear();
         input.forEach(PassportParser::parseLine);
 
         return build(mutableMap.get("byr"), mutableMap.get("iyr"), mutableMap.get("eyr"), mutableMap.get("hgt"),
                 mutableMap.get("hcl"), mutableMap.get("ecl"), mutableMap.get("pid"), mutableMap.get("cid"));
+    }
+
+    public static Optional<Passport> parseStrict(List<String> input) {
+        mutableMap.clear();
+        input.forEach(PassportParser::parseLine);
+
+        final var byr = Year.from(mutableMap.get("byr"));
+        final var iyr = Year.from(mutableMap.get("iyr"));
+        final var eyr = Year.from(mutableMap.get("eyr"));
+        final var hgt = Height.from(mutableMap.get("hgt"));
+        final var hcl = HairColor.from(mutableMap.get("hcl"));
+        final var ecl = EyeColor.from(mutableMap.get("ecl"));
+        final var pid = PassportId.from(mutableMap.get("pid"));
+        final var cid = Optional.ofNullable(mutableMap.get("cid"));
+
+        return map10(byr, iyr, eyr, hgt, hcl, ecl, pid, cid,
+                year -> year1 -> year2 -> height -> hairColor -> eyeColor -> passportId -> country ->
+                Passport.build(year, year1, year2, height, hairColor, eyeColor, passportId, country));
     }
 
     public static void parseLine(String line) {

@@ -15,17 +15,29 @@ public final class Day4 {
 
     public Single<Long> run1(Flowable<String> allLines) {
         return bufferUntil(allLines)
-                .map(strings -> strings.stream()
-                        .map(this::splitLines)
-                        .flatMap(Collection::stream)
-                        .filter(s -> !s.isEmpty())
-                        .collect(toUnmodifiableList()))
+                .map(this::prepareEntry)
                 .map(this::parse)
                 .filter(Optional::isPresent)
                 .count();
     }
 
-    private Optional<Passport> parse(List<String> input) {
+    public Single<Long> run2(Flowable<String> allLines) {
+        return bufferUntil(allLines)
+                .map(this::prepareEntry)
+                .map(PassportParser::parseStrict)
+                .filter(Optional::isPresent)
+                .count();
+    }
+
+    private List<String> prepareEntry(List<String> strings) {
+        return strings.stream()
+                .map(this::splitLines)
+                .flatMap(Collection::stream)
+                .filter(s -> !s.isEmpty())
+                .collect(toUnmodifiableList());
+    }
+
+    private Optional<Passport_> parse(List<String> input) {
         return PassportParser.parse(input);
     }
 
