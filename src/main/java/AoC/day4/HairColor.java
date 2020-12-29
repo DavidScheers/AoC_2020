@@ -22,4 +22,8 @@ public final class HairColor {
     public static Pattern getPATTERN() {
         return PATTERN;
     }
+
+    public String getHairColor() {
+        return hairColor;
+    }
 }

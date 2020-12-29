@@ -18,8 +18,8 @@ public class App {
     }
 
     public static void main(String[] args) {
-//        runDay1();
-//        runDay2();
+        runDay1();
+        runDay2();
         runDay4();
     }
 

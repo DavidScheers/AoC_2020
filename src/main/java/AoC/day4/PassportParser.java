@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static AoC.day4.Passport_.build;
-import static AoC.util.AOCFunctions.map10;
+import static AoC.util.AOCFunctions.map8;
 
 public class PassportParser {
 
@@ -34,11 +34,12 @@ public class PassportParser {
         final var hcl = HairColor.from(mutableMap.get("hcl"));
         final var ecl = EyeColor.from(mutableMap.get("ecl"));
         final var pid = PassportId.from(mutableMap.get("pid"));
-        final var cid = Optional.ofNullable(mutableMap.get("cid"));
+        final var cid = Optional.ofNullable(mutableMap.get("cid"))
+                .or(() -> Optional.of(""));
 
-        return map10(byr, iyr, eyr, hgt, hcl, ecl, pid, cid,
+        return map8(byr, iyr, eyr, hgt, hcl, ecl, pid, cid,
                 year -> year1 -> year2 -> height -> hairColor -> eyeColor -> passportId -> country ->
-                Passport.build(year, year1, year2, height, hairColor, eyeColor, passportId, country));
+                        Passport.build(year, year1, year2, height, hairColor, eyeColor, passportId, country));
     }
 
     public static void parseLine(String line) {

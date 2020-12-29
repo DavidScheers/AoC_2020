@@ -15,7 +15,7 @@ public final class PassportId {
             return Optional.empty();
         }
         try {
-            if (value.matches("[0-9]+") && value.length() == 9) {
+            if (value.matches("^[0-9]{9}$") && value.length() == 9) {
                 final var id = Integer.parseInt(value);
                 return Optional.of(new PassportId(id));
             } else {

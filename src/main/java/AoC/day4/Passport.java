@@ -31,12 +31,13 @@ public final class Passport {
     public static Optional<Passport> build(Year birthYear, Year issueYear, Year expirationYear, Height height,
                                            HairColor hairColor, EyeColor eyeColor, PassportId passportID,
                                            String countryID) {
+        final var validatedCountry = countryID.isEmpty() ? null : countryID;
         if (isNull(birthYear) || isNull(issueYear) || isNull(expirationYear) || isNull(height) || isNull(hairColor)
                 || isNull(eyeColor) || isNull(passportID)) {
             return Optional.empty();
         } else {
             final var passport = Optional.of(new Passport(birthYear, issueYear, expirationYear, height, hairColor, eyeColor,
-                    passportID, countryID));
+                    passportID, validatedCountry));
             return passport.filter(p -> p.getBirthYear().greaterThan(new Year(1919)) && p.getBirthYear().smallerThan(new Year(2003)))
                     .filter(p -> p.getExpirationYear().greaterThan(new Year(2019)) && p.getExpirationYear().smallerThan(new Year(2031)))
                     .filter(p -> p.getIssueYear().greaterThan(new Year(2009)) && p.getIssueYear().smallerThan(new Year(2021)));

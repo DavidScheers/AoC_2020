@@ -36,11 +36,10 @@ public final class Height {
         if (c > -1) {
             return parse(value, c);
         } else if (i > -1) {
-            parse(value, i);
+            return parse(value, i);
         } else {
             return Optional.empty();
         }
-        return Optional.empty();
     }
 
     private static Optional<Height> parse(String value, int c) {
